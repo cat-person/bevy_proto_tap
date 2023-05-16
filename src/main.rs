@@ -121,7 +121,7 @@ fn setup_player(
             path: GeometryBuilder::build_as(&shapes::Rectangle {
                 extents: Vec2 { x: smallest_width, y: smallest_width },
                 origin: shapes::RectangleOrigin::CustomCenter(Vec2 { 
-                    x: smallest_width * ((initial_shelf.start + initial_shelf.end) / 2) as f32, 
+                    x: smallest_width * (initial_shelf.start + initial_shelf.end) as f32 / 2.0, 
                     y: smallest_width * 1.5 + smallest_height * initial_shelf.level as f32 - window.height() / 2.0 
                 }),
             }),
@@ -204,14 +204,9 @@ fn player_movement(
             } else if keyboard_input.just_pressed(KeyCode::Right) || keyboard_input.pressed(KeyCode::D) {
                 let shelves_in_the_same_level = shelf_structure.shelves.iter().filter(|shelf| shelf.level == player.shelf.level);
                 let mut candidate: Option<ShelfPosition> = Option::None; 
-                println!("player.shelf: {:?}", player.shelf);
                 for shelf in shelves_in_the_same_level {
-                    println!("{:?}", shelf);
                     if player.shelf.end < shelf.start {
-                        println!("player.shelf: {:?}", player.shelf);
-                        println!("shelf: {:?}", shelf);
                         if candidate.is_none() || shelf.end < candidate.unwrap().end  {
-                            println!("candidate: {:?}", candidate);
                             candidate = Option::from(shelf.clone());
                         }
                     }
@@ -251,7 +246,6 @@ fn player_movement(
         
         if new_shelf_optional.is_some() {
             let new_shelf = new_shelf_optional.unwrap();
-            print!("new_shelf: {:?}", new_shelf);
             commands.entity(entity).despawn();
             commands.spawn((
                 Player{ 
@@ -261,7 +255,7 @@ fn player_movement(
                     path: GeometryBuilder::build_as(&shapes::Rectangle {
                         extents: Vec2 { x: smallest_width, y: smallest_width },
                         origin: shapes::RectangleOrigin::CustomCenter(Vec2 { 
-                            x: smallest_width * ((new_shelf.start + new_shelf.end) / 2) as f32, 
+                            x: smallest_width * (new_shelf.start + new_shelf.end) as f32 / 2.0, 
                             y: smallest_width * 1.5 + smallest_height * new_shelf.level as f32 - window.height() / 2.0 
                         }),
                     }),

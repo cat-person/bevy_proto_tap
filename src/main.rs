@@ -3,7 +3,7 @@ use bevy_prototype_lyon::prelude::*;
 
 fn main() {
     App::new()
-        .insert_resource(ClearColor(Color::rgb(0.5, 0.85, 1.00)))
+        .insert_resource(ClearColor(Color::rgb(0.7, 0.8, 0.85)))
         .init_resource::<ShelfStructure>()
         .add_plugins(DefaultPlugins)
         .add_plugin(ShapePlugin)

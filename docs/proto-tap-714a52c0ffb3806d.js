@@ -1909,7 +1909,7 @@ async function __wbg_init(input) {
     if (wasm !== undefined) return wasm;
 
     if (typeof input === 'undefined') {
-        input = new URL('proto-tap-849c674579f4b2c7_bg.wasm', import.meta.url);
+        input = new URL('proto-tap-714a52c0ffb3806d_bg.wasm', import.meta.url);
     }
     const imports = __wbg_get_imports();
 

@@ -1,25 +1,27 @@
-use bevy::{prelude::{*}, window::PrimaryWindow};
+use bevy::{prelude::{*}, window::{PrimaryWindow, PresentMode, WindowResized}};
 use bevy_prototype_lyon::prelude::*;
 
-
-use wasm_bindgen::prelude::*;
-
-// Our Add function
-// wasm-pack requires "exported" functions
-// to include #[wasm_bindgen]
-#[wasm_bindgen]
 fn main() {
     App::new()
         .insert_resource(ClearColor(Color::rgb(0.7, 0.8, 0.85)))
         .init_resource::<ShelfStructure>()
-        .add_plugins(DefaultPlugins)
+        .add_plugins(DefaultPlugins.set(WindowPlugin {
+            primary_window: Some(Window {
+                present_mode: PresentMode::AutoNoVsync, // Reduces input lag.
+                fit_canvas_to_parent: true,
+                focused: true,
+                ..default()
+            }),
+            ..default()
+        }))
         .add_plugin(ShapePlugin)
         .add_startup_system(setup_system)
-        .add_startup_system(setup_shelves)
+        .add_system(setup_shelves)
         .add_startup_system(setup_player)
         .add_system(player_movement)
         .run();
 }
+
 #[derive(Resource)]
 struct ShelfStructure {
     level_count: u32,
@@ -142,8 +144,20 @@ fn setup_player(
 fn setup_shelves(
     mut commands: Commands,
     window_query: Query<&Window, With<PrimaryWindow>>,
+    old_shelves: Query<(Entity, &Shelf)>,
+    resize_event: Res<Events<WindowResized>>,
     shelf_structure: Res<ShelfStructure>,
 ) {
+    if resize_event.is_empty() {
+        return;
+    }
+
+    if !old_shelves.is_empty() {
+        for (shelf_entity, _) in old_shelves.iter() {
+            commands.entity(shelf_entity).despawn()
+        }
+    }
+
     let window = window_query.get_single().unwrap();
 
     let smallest_width = window.width() / shelf_structure.width as f32;

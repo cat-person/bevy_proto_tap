@@ -5,4 +5,5 @@ authors = ["Cat-Person"]
 edition = "2021"
 
 [dependencies]
-wasm-bindgen = "0.2"
+bevy = "0.10.1"
+bevy_prototype_lyon = "0.8.0"

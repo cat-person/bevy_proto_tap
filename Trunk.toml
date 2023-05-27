@@ -5,3 +5,4 @@ target = "index.html"
 release = false
 # The output dir for all final assets.
 dist = "docs"
+public_url = "/bevy_proto_tap/"

@@ -9,6 +9,7 @@ fn main() {
             primary_window: Some(Window {
                 present_mode: PresentMode::AutoNoVsync, // Reduces input lag.
                 fit_canvas_to_parent: true,
+                canvas: Some(String::from("#main")),
                 focused: true,
                 ..default()
             }),

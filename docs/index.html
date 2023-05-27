@@ -7,10 +7,25 @@
     height: 100%;
     overflow: hidden;
 }</style>
-  
-<link rel="preload" href="/bevy_proto_tap/proto-tap-714a52c0ffb3806d_bg.wasm" as="fetch" type="application/wasm" crossorigin="">
-<link rel="modulepreload" href="/bevy_proto_tap/proto-tap-714a52c0ffb3806d.js"></head>
-<body><script type="module">import init from '/bevy_proto_tap/proto-tap-714a52c0ffb3806d.js';init('/bevy_proto_tap/proto-tap-714a52c0ffb3806d_bg.wasm');</script><script>(function () {
+    <script>setTimeout(function () {
+    let canvas = document.getElementById("main");
+    canvas?.focus()
+}, 300);
+
+setTimeout(function () {
+    let canvas = document.getElementById("main");
+    canvas?.focus()
+}, 1000);</script>
+    <!-- <script src="focus-manager.js"></script> -->
+
+<link rel="preload" href="/bevy_proto_tap/proto-tap-29f49150d3c08607_bg.wasm" as="fetch" type="application/wasm" crossorigin="">
+<link rel="modulepreload" href="/bevy_proto_tap/proto-tap-29f49150d3c08607.js"></head>
+
+<body>
+    <canvas id="main" tabindex="0" style="color: black;"></canvas>
+
+
+<script type="module">import init from '/bevy_proto_tap/proto-tap-29f49150d3c08607.js';init('/bevy_proto_tap/proto-tap-29f49150d3c08607_bg.wasm');</script><script>(function () {
     var protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
     var url = protocol + '//' + window.location.host + '/_trunk/ws';
     var poll_interval = 5000;

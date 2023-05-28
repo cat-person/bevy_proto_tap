@@ -18,7 +18,7 @@ fn main() {
         .add_plugin(ShapePlugin)
         .add_startup_system(setup_system)
         .add_system(setup_shelves)
-        .add_startup_system(setup_player)
+        .add_system(setup_player)
         .add_system(player_movement)
         .run();
 }
@@ -115,24 +115,41 @@ fn setup_system(mut commands: Commands) {
 fn setup_player(
     mut commands: Commands,
     window_query: Query<&Window, With<PrimaryWindow>>,
+    resize_event: Res<Events<WindowResized>>,
+    player_query: Query<(Entity, &Player)>,
     shelf_structure: Res<ShelfStructure>
 ) {
+
+    if resize_event.is_empty() {
+        return;
+    }
+
     let window = window_query.get_single().unwrap();
-    let smallest_width = window.width() / 32.0;
+
+    let smallest_width = window.width() / shelf_structure.width as f32;
     let smallest_height = window.height() / (shelf_structure.level_count + 1) as f32;
 
-    let initial_shelf = shelf_structure.shelves.get(0).unwrap();
+    let current_shelf = if !player_query.is_empty() {
+
+        let (player_entity, player) = player_query.get_single().unwrap();
+        commands.entity(player_entity).despawn();
+        player.shelf
+    } else {
+        shelf_structure.shelves.get(0).unwrap().clone()
+    };
+
+    
 
     commands.spawn((
         Player{ 
-            shelf: initial_shelf.clone(),
+            shelf: current_shelf,
         },
         ShapeBundle {
             path: GeometryBuilder::build_as(&shapes::Rectangle {
                 extents: Vec2 { x: smallest_width, y: smallest_width },
                 origin: shapes::RectangleOrigin::CustomCenter(Vec2 { 
-                    x: smallest_width * (initial_shelf.start + initial_shelf.end) as f32 / 2.0, 
-                    y: smallest_width * 1.5 + smallest_height * initial_shelf.level as f32 - window.height() / 2.0 
+                    x: smallest_width * (current_shelf.start + current_shelf.end) as f32 / 2.0, 
+                    y: smallest_width * 1.5 + smallest_height * current_shelf.level as f32 - window.height() / 2.0 
                 }),
             }),
             ..default()
